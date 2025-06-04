@@ -1,11 +1,15 @@
 package org.example.itserviceorderapp.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "services")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ITService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
