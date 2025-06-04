@@ -11,8 +11,12 @@ import java.util.Optional;
 @Service
 public class CustomerService {
 
+    private final CustomerRepository customerRepository;
+
     @Autowired
-    private CustomerRepository customerRepository;
+    public CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
@@ -22,8 +26,28 @@ public class CustomerService {
         return customerRepository.findById(id);
     }
 
-    public Customer saveCustomer(Customer customer) {
+    public Optional<Customer> getCustomerByEmail(String email) {
+        return customerRepository.findByEmail(email);
+    }
+
+    public List<Customer> searchCustomersByName(String name) {
+        return customerRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public Customer createCustomer(Customer customer) {
+        // You might want to check for existing email here to prevent duplicates
         return customerRepository.save(customer);
+    }
+
+    public Customer updateCustomer(Long id, Customer updatedCustomer) {
+        return customerRepository.findById(id)
+                .map(existingCustomer -> {
+                    existingCustomer.setName(updatedCustomer.getName());
+                    existingCustomer.setEmail(updatedCustomer.getEmail());
+                    existingCustomer.setPhone(updatedCustomer.getPhone());
+                    return customerRepository.save(existingCustomer);
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Customer not found with id: " + id));
     }
 
     public void deleteCustomer(Long id) {
