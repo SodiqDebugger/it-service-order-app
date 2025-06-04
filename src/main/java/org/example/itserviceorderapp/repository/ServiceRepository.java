@@ -1,9 +1,13 @@
 package org.example.itserviceorderapp.repository;
 
-import org.example.itserviceorderapp.model.ITService;
+import org.example.itserviceorderapp.model.Service;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-@Repository
-public interface ServiceRepository extends JpaRepository<ITService, Long> {
+public interface ServiceRepository extends JpaRepository<Service, Long> {
+    // Example: Find services by name containing a keyword (case insensitive)
+    List<Service> findByNameContainingIgnoreCase(String name);
+
+    // Example: Find by status if your Service entity has a status field
+    // List<Service> findByStatus(String status);
 }
